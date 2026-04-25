@@ -10,7 +10,7 @@ interface Props {
 async function fetchSeller(id: string) {
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, business_name, bio, profile_image_url, rating, location_label')
+    .select('id, business_name, bio, profile_image_url, rating, total_reviews, location_label')
     .eq('id', id)
     .single();
 
@@ -24,15 +24,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const pageUrl = `${siteUrl}/seller/${id}`;
-  const ratingStr = seller.rating != null ? ` ★ ${seller.rating}` : '';
+
+  const reviewCount = seller.total_reviews ?? 0;
+  let statsStr = '';
+  if (seller.rating != null && reviewCount > 0) {
+    statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}        ★ ${seller.rating}`;
+  } else if (seller.rating != null) {
+    statsStr = ` · ★ ${seller.rating}`;
+  } else if (reviewCount > 0) {
+    statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}`;
+  }
+
   const locationStr = seller.location_label ? ` · ${seller.location_label}` : '';
-  const description = seller.bio ?? `${seller.business_name}${locationStr} on Kitchnly.`;
+  const description = `${seller.business_name}${statsStr}${locationStr}`;
 
   return {
-    title: `${seller.business_name}${ratingStr} | Kitchnly`,
+    title: `${seller.business_name} | Kitchnly`,
     description,
     openGraph: {
-      title: `${seller.business_name}${ratingStr}`,
+      title: seller.business_name,
       description,
       url: pageUrl,
       siteName: 'Kitchnly',
@@ -43,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary',
-      title: `${seller.business_name}${ratingStr}`,
+      title: seller.business_name,
       description,
       images: seller.profile_image_url ? [seller.profile_image_url] : [],
     },
