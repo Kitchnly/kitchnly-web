@@ -7,10 +7,19 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+function extractCity(locationLabel: string | null): string | null {
+  if (!locationLabel) return null;
+  const parts = locationLabel.split(',').map(p => p.trim()).filter(Boolean);
+  // Nominatim format: "Street, City, Province, PostalCode, Canada"
+  // Skip last part (Canada) and second-to-last (province/postal), take what's before
+  const filtered = parts.filter(p => !/^canada$/i.test(p) && !/^[A-Z]\d[A-Z]\s?\d[A-Z]\d$/i.test(p));
+  return filtered.length >= 2 ? filtered[filtered.length - 2] : filtered[0] ?? null;
+}
+
 async function fetchSeller(id: string) {
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, business_name, bio, profile_image_url, rating, total_reviews, city')
+    .select('id, business_name, bio, profile_image_url, rating, total_reviews, city, location_label')
     .eq('id', id)
     .single();
 
@@ -35,7 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}`;
   }
 
-  const locationStr = seller.city ? ` · ${seller.city}` : '';
+  const city = seller.city || extractCity(seller.location_label);
+  const locationStr = city ? ` · ${city}` : '';
   const description = `${seller.business_name}${statsStr}${locationStr}`;
 
   return {
