@@ -10,7 +10,7 @@ interface Props {
 async function fetchProduct(id: string) {
   const { data: product } = await supabase
     .from('seller_products')
-    .select('id, name, description, seller_id')
+    .select('id, name, description, seller_id, sellers(business_name)')
     .eq('id', id)
     .single();
 
@@ -23,7 +23,11 @@ async function fetchProduct(id: string) {
     .order('sort_order', { ascending: true })
     .limit(1);
 
-  return { ...product, imageUrl: images?.[0]?.image_url ?? null };
+  const sellerName = Array.isArray(product.sellers)
+    ? (product.sellers[0]?.business_name ?? null)
+    : ((product.sellers as { business_name: string } | null)?.business_name ?? null);
+
+  return { ...product, imageUrl: images?.[0]?.image_url ?? null, sellerName };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -33,14 +37,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const pageUrl = `${siteUrl}/product/${id}/${sellerId}`;
-  const description = product.description ?? 'Discover this product on Kitchnly.';
+
+  const parts = [product.sellerName, product.description].filter(Boolean);
+  const description = parts.length > 0 ? parts.join(' · ') : null;
 
   return {
     title: `${product.name} | Kitchnly`,
-    description,
+    ...(description ? { description } : {}),
     openGraph: {
       title: product.name,
-      description,
+      ...(description ? { description } : {}),
       url: pageUrl,
       siteName: 'Kitchnly',
       images: product.imageUrl ? [{ url: product.imageUrl, width: 1200, height: 630 }] : [],
@@ -49,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: product.name,
-      description,
+      ...(description ? { description } : {}),
       images: product.imageUrl ? [product.imageUrl] : [],
     },
   };
