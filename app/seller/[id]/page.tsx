@@ -10,7 +10,7 @@ interface Props {
 async function fetchSeller(id: string) {
   const { data: seller } = await supabase
     .from('sellers')
-    .select('id, business_name, bio, profile_image_url, rating, total_reviews, location_label')
+    .select('id, business_name, bio, profile_image_url, rating, total_reviews, city')
     .eq('id', id)
     .single();
 
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}`;
   }
 
-  const locationStr = seller.location_label ? ` · ${seller.location_label}` : '';
+  const locationStr = seller.city ? ` · ${seller.city}` : '';
   const description = `${seller.business_name}${statsStr}${locationStr}`;
 
   return {
