@@ -59,11 +59,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pageUrl = `${siteUrl}/seller/${id}`;
 
   const reviewCount = (seller as any).total_reviews ?? 0;
+  const rating = seller.rating != null && seller.rating > 0 ? seller.rating : null;
   let statsStr = '';
-  if (seller.rating != null && reviewCount > 0) {
-    statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}        ★ ${seller.rating}`;
-  } else if (seller.rating != null) {
-    statsStr = ` · ★ ${seller.rating}`;
+  if (rating && reviewCount > 0) {
+    statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}        ★ ${rating}`;
+  } else if (rating) {
+    statsStr = ` · ★ ${rating}`;
   } else if (reviewCount > 0) {
     statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}`;
   }
