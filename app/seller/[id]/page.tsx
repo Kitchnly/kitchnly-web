@@ -17,11 +17,22 @@ function extractCity(locationLabel: string | null): string | null {
 }
 
 async function fetchSeller(id: string) {
-  const { data: seller } = await supabase
+  const { data: seller, error } = await supabase
     .from('sellers')
     .select('id, business_name, bio, profile_image_url, rating, total_reviews, city, location_label')
     .eq('id', id)
     .single();
+
+  if (error) {
+    console.error('fetchSeller error:', error.message);
+    // Retry with only guaranteed columns if new columns caused the failure
+    const { data: fallback } = await supabase
+      .from('sellers')
+      .select('id, business_name, bio, profile_image_url, rating, location_label')
+      .eq('id', id)
+      .single();
+    return fallback ?? null;
+  }
 
   return seller ?? null;
 }
@@ -34,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const pageUrl = `${siteUrl}/seller/${id}`;
 
-  const reviewCount = seller.total_reviews ?? 0;
+  const reviewCount = (seller as any).total_reviews ?? 0;
   let statsStr = '';
   if (seller.rating != null && reviewCount > 0) {
     statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}        ★ ${seller.rating}`;
@@ -44,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     statsStr = ` · ${reviewCount} review${reviewCount === 1 ? '' : 's'}`;
   }
 
-  const city = seller.city || extractCity(seller.location_label);
+  const city = (seller as any).city || extractCity(seller.location_label);
   const locationStr = city ? ` · ${city}` : '';
   const description = `${seller.business_name}${statsStr}${locationStr}`;
 
