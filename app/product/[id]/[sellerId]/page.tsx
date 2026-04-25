@@ -10,7 +10,7 @@ interface Props {
 async function fetchProduct(id: string) {
   const { data: product } = await supabase
     .from('seller_products')
-    .select('id, name, description, seller_id, sellers(business_name)')
+    .select('id, name, description, seller_id, sellers(business_name, city)')
     .eq('id', id)
     .single();
 
@@ -23,11 +23,11 @@ async function fetchProduct(id: string) {
     .order('sort_order', { ascending: true })
     .limit(1);
 
-  const sellerName = Array.isArray(product.sellers)
-    ? (product.sellers[0]?.business_name ?? null)
-    : ((product.sellers as { business_name: string } | null)?.business_name ?? null);
+  const seller = Array.isArray(product.sellers) ? product.sellers[0] : (product.sellers as { business_name: string; city: string | null } | null);
+  const sellerName = seller?.business_name ?? null;
+  const sellerCity = seller?.city ?? null;
 
-  return { ...product, imageUrl: images?.[0]?.image_url ?? null, sellerName };
+  return { ...product, imageUrl: images?.[0]?.image_url ?? null, sellerName, sellerCity };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,7 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const pageUrl = `${siteUrl}/product/${id}/${sellerId}`;
 
-  const parts = [product.sellerName, product.description].filter(Boolean);
+  const sellerLine = [product.sellerName, product.sellerCity].filter(Boolean).join(' · ');
+  const parts = [sellerLine || null, product.description].filter(Boolean);
   const description = parts.length > 0 ? parts.join(' · ') : null;
 
   return {
