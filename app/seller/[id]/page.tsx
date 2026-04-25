@@ -7,24 +7,25 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-const PROVINCES = new Set([
+const PROVINCE_NAMES = [
   'ontario', 'quebec', 'british columbia', 'alberta', 'manitoba', 'saskatchewan',
   'nova scotia', 'new brunswick', 'newfoundland and labrador', 'prince edward island',
   'northwest territories', 'nunavut', 'yukon',
-  'on', 'qc', 'bc', 'ab', 'mb', 'sk', 'ns', 'nb', 'nl', 'pe', 'nt', 'nu', 'yt',
-]);
+];
 
 function extractCity(locationLabel: string | null): string | null {
   if (!locationLabel) return null;
   const parts = locationLabel.split(',').map(p => p.trim()).filter(Boolean);
-  const filtered = parts.filter(p =>
-    !/^canada$/i.test(p) &&
-    !/^[A-Z]\d[A-Z]/i.test(p) &&
-    !PROVINCES.has(p.toLowerCase()) &&
-    !/^\d/.test(p) &&
-    !/^(regional|municipality|county|district|township)/i.test(p)
-  );
-  // Take the last remaining part — most specific non-street admin level is the city
+  const filtered = parts.filter(p => {
+    const lower = p.toLowerCase();
+    return (
+      !/^canada$/i.test(p) &&
+      !/^[A-Z]\d[A-Z]/i.test(p) &&
+      !/^\d/.test(p) &&
+      !/^(regional|municipality|county|district|township)/i.test(p) &&
+      !PROVINCE_NAMES.some(prov => lower === prov || lower.includes(prov))
+    );
+  });
   return filtered[filtered.length - 1] ?? null;
 }
 
