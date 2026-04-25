@@ -7,13 +7,25 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+const PROVINCES = new Set([
+  'ontario', 'quebec', 'british columbia', 'alberta', 'manitoba', 'saskatchewan',
+  'nova scotia', 'new brunswick', 'newfoundland and labrador', 'prince edward island',
+  'northwest territories', 'nunavut', 'yukon',
+  'on', 'qc', 'bc', 'ab', 'mb', 'sk', 'ns', 'nb', 'nl', 'pe', 'nt', 'nu', 'yt',
+]);
+
 function extractCity(locationLabel: string | null): string | null {
   if (!locationLabel) return null;
   const parts = locationLabel.split(',').map(p => p.trim()).filter(Boolean);
-  // Nominatim format: "Street, City, Province, PostalCode, Canada"
-  // Skip last part (Canada) and second-to-last (province/postal), take what's before
-  const filtered = parts.filter(p => !/^canada$/i.test(p) && !/^[A-Z]\d[A-Z]\s?\d[A-Z]\d$/i.test(p));
-  return filtered.length >= 2 ? filtered[filtered.length - 2] : filtered[0] ?? null;
+  const filtered = parts.filter(p =>
+    !/^canada$/i.test(p) &&
+    !/^[A-Z]\d[A-Z]/i.test(p) &&
+    !PROVINCES.has(p.toLowerCase()) &&
+    !/^\d/.test(p) &&
+    !/^(regional|municipality|county|district|township)/i.test(p)
+  );
+  // Take the last remaining part — most specific non-street admin level is the city
+  return filtered[filtered.length - 1] ?? null;
 }
 
 async function fetchSeller(id: string) {
