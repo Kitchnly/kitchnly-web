@@ -1,15 +1,23 @@
-import { redirect } from 'next/navigation';
+import { Header } from "@/components/header";
+import { Hero } from "@/components/hero";
+import { Features } from "@/components/features";
+import { HowItWorks } from "@/components/how-it-works";
+import { FoundingCookPerks } from "@/components/founding-cook-perks";
+import { WaitlistForm } from "@/components/waitlist-form";
+import { FAQ } from "@/components/faq";
+import { Footer } from "@/components/footer";
 
-export default function RootPage() {
-  const iosUrl = process.env.NEXT_PUBLIC_IOS_APP_STORE_URL;
-  if (iosUrl) redirect(iosUrl);
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Kitchnly</h1>
-        <p className="mt-2 text-gray-500">Discover local food makers near you.</p>
-      </div>
-    </div>
+    <main className="min-h-screen">
+      <Header />
+      <Hero />
+      <Features />
+      <HowItWorks />
+      <FoundingCookPerks />
+      <WaitlistForm />
+      <FAQ />
+      <Footer />
+    </main>
   );
 }
