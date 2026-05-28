@@ -8,6 +8,8 @@ type SellerWaitlistInsert = {
   city: string;
   province: string;
   hear_about_us: string;
+  cuisines: string[];
+  cuisine_other: string | null;
   monthly_wtp: string;
   notes: string | null;
   source?: string | null;

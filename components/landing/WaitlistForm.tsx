@@ -1,9 +1,11 @@
 'use client';
 
-import { useActionState, useEffect, useId, useRef } from 'react';
+import { useActionState, useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
 import { submitWaitlist, type WaitlistState } from '@/app/actions/waitlist';
 import {
+  CUISINE_OPTIONS,
+  CUISINE_OTHER_VALUE,
   HEAR_ABOUT_OPTIONS,
   MONTHLY_WTP_OPTIONS,
   PROVINCES,
@@ -30,6 +32,7 @@ function FieldError({ id, errors }: { id: string; errors?: string[] }) {
 
 export function WaitlistForm() {
   const [state, action, pending] = useActionState(submitWaitlist, initialState);
+  const [otherChecked, setOtherChecked] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const ids = {
@@ -39,6 +42,8 @@ export function WaitlistForm() {
     city: useId(),
     province: useId(),
     hear: useId(),
+    cuisines: useId(),
+    cuisineOther: useId(),
     wtp: useId(),
     notes: useId(),
   };
@@ -217,6 +222,76 @@ export function WaitlistForm() {
         </select>
         <FieldError id={`${ids.province}-err`} errors={fieldErrors.province} />
       </div>
+
+      <fieldset
+        aria-invalid={!!fieldErrors.cuisines}
+        aria-describedby={fieldErrors.cuisines ? `${ids.cuisines}-err` : undefined}
+      >
+        <legend className="text-sm font-medium text-text-primary">
+          What do you cook?<RequiredMark />
+        </legend>
+        <p className="mt-1.5 text-sm text-text-secondary">
+          Pick anything that applies — cuisines, baking, dietary specialties.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {CUISINE_OPTIONS.map((opt) => {
+            const isOther = opt === CUISINE_OTHER_VALUE;
+            return (
+              <label
+                key={opt}
+                className="flex items-start gap-3 rounded-2xl border border-border-warm bg-bg-cream px-4 py-3 cursor-pointer hover:border-brand-orange/60 transition-colors has-[:checked]:border-brand-orange has-[:checked]:bg-surface-warm-2"
+              >
+                <input
+                  type="checkbox"
+                  name="cuisines"
+                  value={opt}
+                  onChange={
+                    isOther
+                      ? (e) => setOtherChecked(e.currentTarget.checked)
+                      : undefined
+                  }
+                  className="mt-1 h-4 w-4 accent-[var(--color-brand-orange)]"
+                />
+                <span className="text-text-primary text-sm leading-snug">{opt}</span>
+              </label>
+            );
+          })}
+        </div>
+        <FieldError id={`${ids.cuisines}-err`} errors={fieldErrors.cuisines} />
+
+        {otherChecked && (
+          <div className="mt-4 rounded-2xl bg-surface-warm-2/60 border border-border-warm p-4">
+            <label
+              htmlFor={ids.cuisineOther}
+              className="block text-sm font-medium text-text-primary"
+            >
+              Tell us what you cook<RequiredMark />
+            </label>
+            <p className="mt-1 text-sm text-text-secondary">
+              A few words is fine — regional names, signature dishes, dietary
+              niches. E.g. &ldquo;Hyderabadi biryani, ragi dosa, jain food.&rdquo;
+            </p>
+            <input
+              id={ids.cuisineOther}
+              name="cuisine_other"
+              type="text"
+              maxLength={300}
+              required
+              aria-required
+              aria-invalid={!!fieldErrors.cuisine_other}
+              aria-describedby={
+                fieldErrors.cuisine_other ? `${ids.cuisineOther}-err` : undefined
+              }
+              autoFocus
+              className="mt-2 w-full rounded-xl border border-border-warm bg-bg-cream px-4 py-3 text-text-primary placeholder:text-text-muted focus:border-brand-orange focus:outline-none"
+            />
+            <FieldError
+              id={`${ids.cuisineOther}-err`}
+              errors={fieldErrors.cuisine_other}
+            />
+          </div>
+        )}
+      </fieldset>
 
       <div>
         <label htmlFor={ids.hear} className="block text-sm font-medium text-text-primary">
