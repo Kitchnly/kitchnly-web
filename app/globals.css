@@ -46,43 +46,63 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* Custom Kitchnly colors */
+  --color-primary-hover: var(--primary-hover);
+  --color-accent-orange: var(--accent-orange);
+  --color-surface: var(--surface);
+  --color-surface-warm: var(--surface-warm);
+  --color-border-warm: var(--border-warm);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent-brown: var(--accent-brown);
+  --color-success: var(--success);
+  --color-error: var(--error);
 }
 
 :root {
-  /* Kitchnly Brand Colors - Warm cream and orange palette */
-  --background: oklch(0.993 0.008 90);
-  --foreground: oklch(0.22 0.02 60);
-  --card: oklch(0.96 0.012 85);
-  --card-foreground: oklch(0.22 0.02 60);
-  --popover: oklch(0.993 0.008 90);
-  --popover-foreground: oklch(0.22 0.02 60);
-  --primary: oklch(0.62 0.19 40);
-  --primary-foreground: oklch(0.993 0.008 90);
-  --secondary: oklch(0.96 0.012 85);
-  --secondary-foreground: oklch(0.22 0.02 60);
-  --muted: oklch(0.96 0.012 85);
-  --muted-foreground: oklch(0.5 0.02 60);
-  --accent: oklch(0.96 0.012 85);
-  --accent-foreground: oklch(0.22 0.02 60);
-  --destructive: oklch(0.55 0.22 25);
-  --border: oklch(0.91 0.012 80);
-  --input: oklch(0.91 0.012 80);
-  --ring: oklch(0.62 0.19 40);
-  --chart-1: oklch(0.62 0.19 40);
-  --chart-2: oklch(0.75 0.16 75);
-  --chart-3: oklch(0.75 0.18 130);
-  --chart-4: oklch(0.72 0.19 145);
-  --chart-5: oklch(0.7 0.15 180);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.993 0.008 90);
-  --sidebar-foreground: oklch(0.22 0.02 60);
-  --sidebar-primary: oklch(0.62 0.19 40);
-  --sidebar-primary-foreground: oklch(0.993 0.008 90);
-  --sidebar-accent: oklch(0.96 0.012 85);
-  --sidebar-accent-foreground: oklch(0.22 0.02 60);
-  --sidebar-border: oklch(0.91 0.012 80);
-  --sidebar-ring: oklch(0.62 0.19 40);
-  --font-heading: 'DM Serif Display', serif;
+  /* Kitchnly Brand Colors - Exact values from spec */
+  --background: #FFFDF8;
+  --foreground: #1A1A1A;
+  --card: #F5F0E8;
+  --card-foreground: #1A1A1A;
+  --popover: #FFFDF8;
+  --popover-foreground: #1A1A1A;
+  --primary: #E8671A;
+  --primary-hover: #C9541A;
+  --primary-foreground: #FFFDF8;
+  --secondary: #F5F0E8;
+  --secondary-foreground: #1A1A1A;
+  --muted: #F5F0E8;
+  --muted-foreground: #6B7280;
+  --accent: #F5F0E8;
+  --accent-foreground: #1A1A1A;
+  --accent-orange: #FF7A00;
+  --accent-brown: #7A4000;
+  --destructive: #DC2626;
+  --border: #F0E2D5;
+  --border-warm: #F0E2D5;
+  --input: #F0E2D5;
+  --ring: #E8671A;
+  --surface: #F5F0E8;
+  --surface-warm: #FFF3E8;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --success: #16A34A;
+  --error: #DC2626;
+  --chart-1: #E8671A;
+  --chart-2: #FF7A00;
+  --chart-3: #7A4000;
+  --chart-4: #16A34A;
+  --chart-5: #6B7280;
+  --radius: 1rem;
+  --sidebar: #FFFDF8;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #E8671A;
+  --sidebar-primary-foreground: #FFFDF8;
+  --sidebar-accent: #F5F0E8;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #F0E2D5;
+  --sidebar-ring: #E8671A;
 }
 
 @layer base {
@@ -93,6 +113,11 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans scroll-smooth;
+    @apply scroll-smooth;
   }
+}
+
+/* Custom heading font utility */
+.font-heading {
+  font-family: var(--font-heading), serif;
 }

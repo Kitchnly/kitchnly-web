@@ -1,44 +1,29 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">K</span>
-            </div>
-            <span className="font-heading text-xl text-foreground">Kitchnly</span>
-          </Link>
-          <nav className="hidden md:flex items-center gap-8">
-            <Link
-              href="#features"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              How It Works
-            </Link>
-            <Link
-              href="#faq"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              FAQ
-            </Link>
-          </nav>
-          <Link
-            href="#waitlist"
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
-          >
-            Join Waitlist
-          </Link>
-        </div>
-      </div>
+    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border-warm">
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/logo.png"
+            alt="Kitchnly"
+            width={40}
+            height={40}
+            className="size-10"
+          />
+          <span className="font-heading text-xl text-foreground">Kitchnly</span>
+        </Link>
+        <Link
+          href="#join"
+          className="rounded-2xl bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          Join the waitlist
+        </Link>
+      </nav>
     </header>
   );
 }

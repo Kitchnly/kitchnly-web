@@ -7,60 +7,52 @@ import {
 
 const faqs = [
   {
-    question: "What is Kitchnly?",
+    question: "When does Kitchnly launch?",
     answer:
-      "Kitchnly is a mobile marketplace that connects local home cooks with hungry neighbors. We make it easy for talented cooks to share their homemade dishes with their community, and for food lovers to discover authentic, locally-made meals.",
+      "We're onboarding cooks in waves through 2026 and opening to customers city-by-city. Join the waitlist to get access early.",
   },
   {
-    question: "Is it legal to sell homemade food?",
+    question: "Do I need a food handler's permit or business license?",
     answer:
-      "Yes! Many states have cottage food laws that allow home cooks to sell certain types of food. Kitchnly helps you understand the regulations in your area and ensures all our cooks meet local food safety requirements.",
+      "Requirements vary by province and city. We'll guide you through what's needed in your area when you're invited.",
   },
   {
-    question: "How do I become a cook on Kitchnly?",
+    question: "How much can I earn?",
     answer:
-      "Join our waitlist and select \"Sell Food\" as your interest. Once we launch in your area, we'll guide you through our simple onboarding process, including food safety certification and setting up your menu.",
+      "You set your own prices. Through 2026 we take zero commission.",
   },
   {
-    question: "When will Kitchnly be available in my area?",
+    question: "What happens in January 2027?",
     answer:
-      "We're launching in select cities in 2025. Join the waitlist with your zip code, and we'll notify you as soon as we're available near you. The more people who sign up from your area, the sooner we'll arrive!",
+      "We'll introduce paid plans. Founding cooks on the waitlist lock in early-bird pricing.",
   },
   {
-    question: "How much does it cost to use Kitchnly?",
+    question: "How do customers find me?",
     answer:
-      "For buyers, there's no fee beyond the cost of your order. For cooks, we take a small percentage of each sale to cover payment processing and platform costs. Founding cooks get 0% fees for their first 6 months!",
-  },
-  {
-    question: "How do you ensure food safety?",
-    answer:
-      "All cooks on Kitchnly must complete food safety training and certification. We also require cooks to follow local health guidelines and maintain high hygiene standards. Our review system helps maintain quality across the platform.",
+      "Customers search by location, food category, tags, and dietary needs. Your kitchen profile is your storefront.",
   },
 ];
 
 export function FAQ() {
   return (
-    <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl sm:text-4xl text-foreground mb-4">
+    <section id="faq" className="bg-surface px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-12 text-center">
+          <h2 className="font-heading text-3xl tracking-tight text-foreground sm:text-4xl">
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Got questions? We&apos;ve got answers.
-          </p>
         </div>
-        <Accordion type="single" collapsible className="space-y-4">
+        <Accordion type="single" collapsible className="flex flex-col gap-4">
           {faqs.map((faq, index) => (
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="bg-card rounded-xl px-6 border border-border data-[state=open]:border-primary/30"
+              className="rounded-2xl bg-background px-6 border border-border data-[state=open]:border-primary/30"
             >
-              <AccordionTrigger className="text-left font-heading text-lg hover:no-underline py-5">
+              <AccordionTrigger className="py-5 text-left font-heading text-lg hover:no-underline">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
+              <AccordionContent className="pb-5 leading-relaxed text-text-secondary">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

@@ -1,35 +1,34 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-const dmSerifDisplay = DM_Serif_Display({
-  weight: "400",
+const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-heading",
 });
 
 export const metadata: Metadata = {
-  title: "Kitchnly - Homemade Food, Made Local",
+  title: "Kitchnly - Homemade. Heartmade.",
   description:
-    "Discover and order authentic homemade food from talented home cooks in your neighborhood. Join the waitlist to be among the first to experience local, lovingly-prepared meals.",
+    "Turn your kitchen into a business. Kitchnly is a marketplace that connects home cooks with hungry neighbours. List your dishes, set your own prices, and start earning.",
   keywords: [
     "homemade food",
-    "local food",
-    "home cooks",
-    "food marketplace",
-    "neighborhood food",
+    "home cooking",
+    "sell food from home",
     "cottage food",
+    "local food marketplace",
+    "home cook business",
   ],
   openGraph: {
-    title: "Kitchnly - Homemade Food, Made Local",
+    title: "Kitchnly - Homemade. Heartmade.",
     description:
-      "Discover and order authentic homemade food from talented home cooks in your neighborhood.",
+      "Turn your kitchen into a business. Connect with hungry neighbours and start earning from the food you love to make.",
     type: "website",
   },
 };
@@ -46,9 +45,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("font-sans bg-background", dmSans.variable, dmSerifDisplay.variable)}
+      className={cn("bg-background", inter.variable, fraunces.variable)}
     >
-      <body className="antialiased">{children}</body>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }
