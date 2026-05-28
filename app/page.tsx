@@ -1,15 +1,25 @@
-import { redirect } from 'next/navigation';
+import { Nav } from '@/components/landing/Nav';
+import { Hero } from '@/components/landing/Hero';
+import { WhyKitchnly } from '@/components/landing/WhyKitchnly';
+import { HowItWorks } from '@/components/landing/HowItWorks';
+import { AppScreenshots } from '@/components/landing/AppScreenshots';
+import { FoundingCook } from '@/components/landing/FoundingCook';
+import { WaitlistSection } from '@/components/landing/WaitlistSection';
+import { Faq } from '@/components/landing/Faq';
+import { Footer } from '@/components/landing/Footer';
 
-export default function RootPage() {
-  const iosUrl = process.env.NEXT_PUBLIC_IOS_APP_STORE_URL;
-  if (iosUrl) redirect(iosUrl);
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">Kitchnly</h1>
-        <p className="mt-2 text-gray-500">Discover local food makers near you.</p>
-      </div>
-    </div>
+    <main>
+      <Nav />
+      <Hero />
+      <WhyKitchnly />
+      <HowItWorks />
+      <AppScreenshots />
+      <FoundingCook />
+      <WaitlistSection />
+      <Faq />
+      <Footer />
+    </main>
   );
 }
